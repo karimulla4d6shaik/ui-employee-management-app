@@ -1,0 +1,23 @@
+.text-color{
+    color: #0736b5;
+}
+
+.btn-background{
+    background-color: #0736b5;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-background:hover{
+    background-color: #2248b2;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-link-decoration-none{
+    text-decoration: none;
+}
+
+.btn-link-decoration-none:hover{
+    text-decoration: underline;
+}

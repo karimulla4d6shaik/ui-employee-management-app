@@ -1,1 +1,40 @@
-<p>login works!</p>
+<div class="container">
+    <div class="row card mt-1">
+        <div class="card-header"><h4 class="text-color">Employee management service</h4></div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 card">
+            <div class="row card-header"><h4 class="text-color">Login</h4></div>
+            <div class="row card-body text-danger">
+                {{error}}
+            </div>
+            <form #loginForm="ngForm" (submit)="loginFunction()">
+                <div class="row card-body">
+                    <div class="col-5">Username</div>
+                    <div class="col-7">
+                         <input type="text" required #username="ngModel" class="form-control" [(ngModel)]="login.userName" name="username" placeholder="Enter username" id="username">
+                    </div>
+                    <small class="text-danger" [hidden]="(username.valid && username.touched) ||  username.untouched">Username is mandatory</small>
+                </div>
+                <div class="row card-body">
+                     <div class="col-5">Password</div>
+                     <div class="col-7">
+                          <input type="password" required #password="ngModel" class="form-control" [(ngModel)]="login.password" name="password" placeholder="Enter password" id="password">
+                     </div>
+                     <small class="text-danger" [hidden]="(password.valid && password.touched) ||  password.untouched">Password is mandatory</small>
+                </div>
+                <div class="row card-body">
+                    <div class="col-5">
+                        <a class="btn btn-link btn-link-decoration-none">Forget Password</a>
+                   </div>
+                    <div class="col-7 d-grid">
+                         <input type="submit" class="btn btn-background" name="login" id="login" value="Login">
+                    </div>
+               </div>
+            </form>
+            <div class="row"></div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
