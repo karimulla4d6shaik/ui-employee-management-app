@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoginSuccess } from '../models/login-success.model';
 import { Login } from '../models/login.model';
 import { AppStorage } from '../models/storage.model';
 import { LoginService } from '../services/login.service';
+import { ShareService } from '../services/share.service';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +15,14 @@ export class LoginComponent implements OnInit {
 
   login = new Login();
   error: string='';
+  loginFlag:boolean=false;
   private storage = new AppStorage();
 
-  constructor(private loginService : LoginService) { }
+  constructor(private loginService : LoginService, private shareService : ShareService,
+    private router : Router) { }
 
   ngOnInit(): void {
+    this.shareInfo(this.loginFlag);
   }
 
   loginFunction(): any{
@@ -33,7 +38,9 @@ export class LoginComponent implements OnInit {
         let loginSuccess = new LoginSuccess();
         loginSuccess.userName = response.userName;
         loginSuccess.token = response.token;
-        this.storage.setLocalStorage(loginSuccess);        
+        this.storage.setLocalStorage(loginSuccess);
+        this.loginFlag = true;        
+        this.router.navigate(['/home']);         
       }else{
         this.error = response.status;
         this.storage.consoleStorage(response);
@@ -44,5 +51,9 @@ export class LoginComponent implements OnInit {
       }
       this.storage.consoleStorage(error.error);
     });
+  }
+
+  shareInfo(data:any){
+    this.shareService.setInformation(data);      
   }
 }
