@@ -4,7 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RequestInterceptorService } from './services/request-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,13 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      useClass : RequestInterceptorService,
+      multi : true,
+      provide : HTTP_INTERCEPTORS
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

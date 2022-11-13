@@ -21,3 +21,23 @@ body{
     border-color: #a849f5;
     background: linear-gradient(to right, #a849f5, white);
 }
+
+.page-link{
+    color: black;
+    background-color: white;
+}
+
+.page-link:hover{
+    color: black;
+    background: linear-gradient(to right, #a849f5, white);
+}
+
+.pagination-active .page-link{
+    color: white;
+    background-color: #410077;
+}
+
+.pagination-active:hover .page-link{
+    color: black;
+    background-color: #410077;
+}
