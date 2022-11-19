@@ -14,4 +14,8 @@ export class RoleService {
   getRoles(page:any, size:any, sortBy:any):Observable<any>{
     return this.http.get(this.url+"v1/roles?page="+page+"&size="+size+"&sort-by="+sortBy);
   }
+
+  deleteRole(roleCode:any):Observable<any>{
+    return this.http.delete(this.url+"v1/roles/"+roleCode);
+  }
 }

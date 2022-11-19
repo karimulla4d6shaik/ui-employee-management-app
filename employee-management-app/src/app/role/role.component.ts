@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AllRoles } from '../models/all-roles.model';
+import { Role } from '../models/role.model';
 import { RoleService } from '../services/role.service';
+import { ShareService } from '../services/share.service';
 
 @Component({
   selector: 'app-role',
@@ -18,6 +20,7 @@ export class RoleComponent implements OnInit {
   pages:any=[];
   selectBoxData:any=[5, 10, 15, 20];
   beforeNextDropdown:any=[];
+  role = new Role();
 
   constructor(private roleService : RoleService) { }
 
@@ -45,42 +48,21 @@ export class RoleComponent implements OnInit {
     this.getAllRoles(this.page, this.size, this.sortBy);
   }
 
+  roleInformation(role:Role){
+    this.role = role;
+  }
+
+  deleteRole(role:Role){
+    this.roleService.deleteRole(role.roleCode).subscribe(response =>{
+      this.displayRoles(response, this.size);
+    }, error => {});
+  }
+
   getAllRoles(page:any, size:any, sortBy:any){
     this.pages = [];
-    this.roleService.getRoles(page, size, sortBy).subscribe(response => {      
-      this.roles.notification = response.notification;
-      this.roles.roleResponseDtos = response.roleResponseDtos;
-      this.roles.totalElements = response.totalElements;
-      this.roles.totalPages = response.totalPages;
-      this.roles.currentPage= response.currentPage;
-      let selectPage = 0;
-      debugger
-      if(this.roles.currentPage === 0){
-        selectPage = this.roles.currentPage - 1;
-      }else{
-        selectPage = this.roles.currentPage - 2;
-      }
-      let k = 0;
-      for(let i = 0; i < this.roles.totalPages; i++){
-        if(i < 3){
-          if(size != this.roles.roleResponseDtos.length){
-            if(selectPage !== -1){
-              this.pages[i] = selectPage;            
-              this.pages[++i] = ++selectPage;
-              this.pages[++i] = ++selectPage;
-            }else{
-              this.pages[i] = ++selectPage;
-              this.pages[++i] = ++selectPage;
-            }
-            break;
-          }
-          this.pages[i] = ++selectPage; 
-        } else{
-            this.beforeNextDropdown[k] = ++selectPage; 
-            k++;         
-        }             
-      }     
-    });
+    this.roleService.getRoles(page, size, sortBy).subscribe(response => {
+      this.displayRoles(response, size);
+    }, error => {});
   }
 
   previous(pageNumber : any){
@@ -152,6 +134,41 @@ export class RoleComponent implements OnInit {
       for(let i=0; i<roles.length; i++){
         this.roles.roleResponseDtos.push(roles[i]);
       }               
+    }
+  }
+
+
+  displayRoles(response:any, size:any){
+    this.roles.notification = response.notification;
+    this.roles.roleResponseDtos = response.roleResponseDtos;
+    this.roles.totalElements = response.totalElements;
+    this.roles.totalPages = response.totalPages;
+    this.roles.currentPage= response.currentPage;
+    let selectPage = 0;
+    if(this.roles.currentPage === 0){
+      selectPage = this.roles.currentPage - 1;
+    }else{
+      selectPage = this.roles.currentPage - 2;
+    }
+    let k = 0;
+    for(let i = 0; i < this.roles.totalPages; i++){
+      if(i < 3){
+        if(size != this.roles.roleResponseDtos.length){
+          if(selectPage !== -1){
+            this.pages[i] = selectPage;            
+            this.pages[++i] = ++selectPage;
+            this.pages[++i] = ++selectPage;
+          }else{
+            this.pages[i] = ++selectPage;
+            this.pages[++i] = ++selectPage;
+          }
+          break;
+        }
+        this.pages[i] = ++selectPage; 
+      } else{
+          this.beforeNextDropdown[k] = ++selectPage; 
+          k++;         
+      }             
     }
   }
 }
