@@ -17,6 +17,7 @@ export class RoleComponent implements OnInit {
   showArrowRoleDesc:boolean=false;
   pages:any=[];
   selectBoxData:any=[5, 10, 15, 20];
+  beforeNextDropdown:any=[];
 
   constructor(private roleService : RoleService) { }
 
@@ -24,18 +25,60 @@ export class RoleComponent implements OnInit {
     this.getAllRoles(this.page, this.size, this.sortBy);
   }
 
+  showDropdown(value:string):boolean{
+    if(value === 'afterPrev'){
+      if(this.page == 0 || this.page == 1){
+        return false;
+      }
+      return true;
+    }else{
+      if(this.roles.currentPage >= (this.roles.totalPages -2)){
+        return false;
+      }
+      return true;
+    }
+    
+  }
+
+  onSelect(){
+    this.page=0;
+    this.getAllRoles(this.page, this.size, this.sortBy);
+  }
 
   getAllRoles(page:any, size:any, sortBy:any){
-    debugger
+    this.pages = [];
     this.roleService.getRoles(page, size, sortBy).subscribe(response => {      
       this.roles.notification = response.notification;
       this.roles.roleResponseDtos = response.roleResponseDtos;
       this.roles.totalElements = response.totalElements;
       this.roles.totalPages = response.totalPages;
       this.roles.currentPage= response.currentPage;
-      let j = 0;
+      let selectPage = 0;
+      debugger
+      if(this.roles.currentPage === 0){
+        selectPage = this.roles.currentPage - 1;
+      }else{
+        selectPage = this.roles.currentPage - 2;
+      }
+      let k = 0;
       for(let i = 0; i < this.roles.totalPages; i++){
-        this.pages[i] = j++;
+        if(i < 3){
+          if(size != this.roles.roleResponseDtos.length){
+            if(selectPage !== -1){
+              this.pages[i] = selectPage;            
+              this.pages[++i] = ++selectPage;
+              this.pages[++i] = ++selectPage;
+            }else{
+              this.pages[i] = ++selectPage;
+              this.pages[++i] = ++selectPage;
+            }
+            break;
+          }
+          this.pages[i] = ++selectPage; 
+        } else{
+            this.beforeNextDropdown[k] = ++selectPage; 
+            k++;         
+        }             
       }     
     });
   }
